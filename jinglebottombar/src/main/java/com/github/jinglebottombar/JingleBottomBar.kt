@@ -55,11 +55,19 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-                setBackgroundColor(context.resources.getColor(R.color.teal_700))
+                setBackgroundColor(ContextCompat.getColor(context, R.color.teal_700))
             }
 
             val textViewsList = mutableListOf<TextView>()
-
+            val horizontalScrollView = HorizontalScrollView(context).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                addView(linearLayout)
+                isHorizontalScrollBarEnabled = false
+                isVerticalScrollBarEnabled = false
+            }
             for (customView in customViews) {
                 val imageView = ImageView(context).apply {
                     setImageResource(customView.imageResource)
@@ -74,7 +82,7 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
                         10f,
                         context.resources.displayMetrics
                     ).toInt()
-                    setPadding(imageViewPadding, 0, imageViewPadding/2, 0)
+                    setPadding(imageViewPadding, 0, imageViewPadding / 2, 0)
                 }
 
                 val textView = TextView(context).apply {
@@ -87,8 +95,8 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
                         20f,
                         context.resources.displayMetrics
                     ).toInt()
-                    setPadding(textVIewPadding/2, 0, textVIewPadding, 0)
-                    setTextColor(context.resources.getColor(R.color.white))
+                    setPadding(textVIewPadding / 2, 0, textVIewPadding, 0)
+                    setTextColor(ContextCompat.getColor(context, R.color.white))
                 }
 
                 val customViewLayout = LinearLayout(context).apply {
@@ -111,40 +119,47 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
                         margin.toFloat(),
                         context.resources.displayMetrics
                     ).toInt()
-                    customViewLayoutParams.setMargins(sizeInPixelsMargin, sizeInPixelsMargin, sizeInPixelsMargin, sizeInPixelsMargin)
+                    customViewLayoutParams.setMargins(
+                        sizeInPixelsMargin,
+                        sizeInPixelsMargin,
+                        sizeInPixelsMargin,
+                        sizeInPixelsMargin
+                    )
                     layoutParams = customViewLayoutParams
                 }
 
                 linearLayout.addView(customViewLayout)
                 textViewsList.add(textView)
 
+
+
                 customViewLayout.setOnClickListener {
                     for (textView in textViewsList) {
+                        textView.alpha = 0f
+                        textView.translationX = -50f
                         textView.visibility = View.GONE
                     }
+                    textView.alpha = 0f
+                    textView.translationX = 50f
                     textView.visibility = View.VISIBLE
-                    customViewLayout.background =
-                        ContextCompat.getDrawable(context, R.drawable.rectangle_transparent)
+                    customViewLayout.background = ContextCompat.getDrawable(context, R.drawable.rectangle_transparent)
+                    imageView.animate().translationX(-10f).setDuration(200).start()
+                    textView.animate().alpha(1f).translationX(0f).setDuration(200).start()
                     for (view in linearLayout.children) {
                         if (view != customViewLayout) {
                             view.setBackgroundColor(Color.TRANSPARENT)
                         }
                     }
+                    val scrollX = customViewLayout.left - horizontalScrollView.width / 2 + customViewLayout.width / 2
+                    horizontalScrollView.smoothScrollTo(scrollX, 0)
                 }
             }
 
-            val horizontalScrollView = HorizontalScrollView(context).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                addView(linearLayout)
-                isHorizontalScrollBarEnabled = false
-                isVerticalScrollBarEnabled = false
-            }
+
 
             parentView.addView(horizontalScrollView)
         }
+
 
 
 
