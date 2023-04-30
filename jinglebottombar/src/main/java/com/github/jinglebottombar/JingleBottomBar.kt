@@ -34,10 +34,10 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
                 context,
                 view,
                 customViewData,
-                100,
+                48,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                5
-            );
+                15
+            )
         }
 
 
@@ -55,68 +55,76 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
+                setBackgroundColor(context.resources.getColor(R.color.teal_700))
             }
-            linearLayout.setBackgroundColor(context.resources.getColor(R.color.teal_700))
+
             val textViewsList = mutableListOf<TextView>()
+
             for (customView in customViews) {
-                val imageView = ImageView(context)
-                imageView.setImageResource(customView.imageResource)
-                val sizeInPixels = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    iconSize.toFloat(),
-                    context.resources.displayMetrics
-                ).toInt()
-                imageView.layoutParams = LinearLayout.LayoutParams(sizeInPixels, sizeInPixels)
-                imageView.setPadding(0, 8, 0, 8)
-                //   imageView.background = context.getDrawable(R.drawable.ic_launcher_background)
+                val imageView = ImageView(context).apply {
+                    setImageResource(customView.imageResource)
+                    val sizeInPixels = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        iconSize.toFloat(),
+                        context.resources.displayMetrics
+                    ).toInt()
+                    layoutParams = LinearLayout.LayoutParams(sizeInPixels, sizeInPixels)
+                    val imageViewPadding = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        10f,
+                        context.resources.displayMetrics
+                    ).toInt()
+                    setPadding(imageViewPadding, 0, imageViewPadding/2, 0)
+                }
 
-                val textView = TextView(context)
-                textView.text = customView.text
-                textView.visibility = View.GONE
-                textView.gravity = Gravity.CENTER
-                textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-                textView.setPadding(0, 16, 0, 16)
-                textView.setTextColor(context.resources.getColor(R.color.black))
+                val textView = TextView(context).apply {
+                    text = customView.text
+                    visibility = View.GONE
+                    gravity = Gravity.CENTER
+                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                    val textVIewPadding = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        20f,
+                        context.resources.displayMetrics
+                    ).toInt()
+                    setPadding(textVIewPadding/2, 0, textVIewPadding, 0)
+                    setTextColor(context.resources.getColor(R.color.white))
+                }
 
-
-                val customViewLayout = LinearLayout(context)
-                customViewLayout.orientation = LinearLayout.HORIZONTAL
-                customViewLayout.addView(imageView)
-                customViewLayout.addView(textView)
-
-
-// Set padding for the custom view layout
-                val padding = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    8f,
-                    context.resources.displayMetrics
-                ).toInt()
-                customViewLayout.setPadding(padding, padding, padding, padding)
-
-                val customViewLayoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                customViewLayoutParams.setMargins(margin, margin, margin, margin)
-                customViewLayout.layoutParams = customViewLayoutParams
+                val customViewLayout = LinearLayout(context).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    addView(imageView)
+                    addView(textView)
+                    gravity = Gravity.CENTER
+                    val padding = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        8f,
+                        context.resources.displayMetrics
+                    ).toInt()
+                    setPadding(padding, padding, padding, padding)
+                    val customViewLayoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    val sizeInPixelsMargin = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        margin.toFloat(),
+                        context.resources.displayMetrics
+                    ).toInt()
+                    customViewLayoutParams.setMargins(sizeInPixelsMargin, sizeInPixelsMargin, sizeInPixelsMargin, sizeInPixelsMargin)
+                    layoutParams = customViewLayoutParams
+                }
 
                 linearLayout.addView(customViewLayout)
-
-                // Add the textView to the list so we can hide it later
                 textViewsList.add(textView)
 
-                // Set the click listener on the imageView to show the corresponding textView and hide all others
-                imageView.setOnClickListener {
+                customViewLayout.setOnClickListener {
                     for (textView in textViewsList) {
                         textView.visibility = View.GONE
                     }
                     textView.visibility = View.VISIBLE
-
-                    // Set background color for clicked custom view
-                    //  customViewLayout.setBackgroundColor(context.resources.getColor(R.color.purple_500))
                     customViewLayout.background =
                         ContextCompat.getDrawable(context, R.drawable.rectangle_transparent)
-                    // Remove background color for other custom views
                     for (view in linearLayout.children) {
                         if (view != customViewLayout) {
                             view.setBackgroundColor(Color.TRANSPARENT)
@@ -124,6 +132,7 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
                     }
                 }
             }
+
             val horizontalScrollView = HorizontalScrollView(context).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -136,6 +145,7 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
 
             parentView.addView(horizontalScrollView)
         }
+
 
 
     }

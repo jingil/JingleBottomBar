@@ -11,12 +11,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val customViews = listOf(
-            JingleBottomBar.CustomViewData(android.R.drawable.gallery_thumb, "Text 1"),
-            JingleBottomBar.CustomViewData(android.R.drawable.btn_minus, "Text 2"),
-            JingleBottomBar.CustomViewData(android.R.drawable.ic_menu_camera, "Text 3"),
-                    JingleBottomBar.CustomViewData(android.R.drawable.ic_menu_crop, "Text 1"),
-        JingleBottomBar.CustomViewData(android.R.drawable.status_bar_item_app_background, "Text 2"),
-        JingleBottomBar.CustomViewData(android.R.drawable.sym_call_incoming, "Text 3")
+            JingleBottomBar.CustomViewData(R.drawable.music_note, "Music Note"),
+            JingleBottomBar.CustomViewData(R.drawable.favorite, "Favorite"),
+            JingleBottomBar.CustomViewData(R.drawable.place, "Place"),
+                    JingleBottomBar.CustomViewData(R.drawable.music_note, "Album"),
+        JingleBottomBar.CustomViewData(R.drawable.place, "Location"),
+        JingleBottomBar.CustomViewData(R.drawable.settings, "Settings")
         )
         val myLayout = findViewById<LinearLayout>(R.id.bottom_navigation)
 
