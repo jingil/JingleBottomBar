@@ -1,4 +1,4 @@
-package com.github.jinglebottombar
+package com.github.jinglebottombar.view
 
 import android.content.Context
 import android.graphics.Color
@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
+import com.github.jinglebottombar.R
+import com.github.jinglebottombar.model.CustomViewData
 
 class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
     class JingleBottomBarLibrary {
@@ -21,13 +23,13 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
                 context: Context,
                 parentView: ViewGroup,
                 viewItems: List<CustomViewData>,
-                imageSize: Int,
-                backgroundColor: Int,
-                textColor: Int,
-                itemViewMargins: List<Int>,
-                imageViewPaddings: List<Int>,
-                textViewPaddings: List<Int>,
-                itemViewPaddings: List<Int>
+                imageSize: Int = 64,
+                backgroundColor: Int = Color.BLACK,
+                textColor: Int = Color.WHITE,
+                itemViewMargins: List<Int> = listOf(15, 15, 5, 15),
+                imageViewPaddings: List<Int> = listOf(15, 0, 15, 0),
+                textViewPaddings: List<Int> = listOf(15, 0, 20, 0),
+                itemViewPaddings: List<Int> = listOf(10, 0, 10, 0)
 
 
             ) {
@@ -138,18 +140,19 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
                     textViewsList.add(textView)
 
                     customViewLayout.setOnClickListener {
+
                         for (textView in textViewsList) {
                             textView.alpha = 0f
                             textView.translationX = -50f
                             textView.visibility = View.GONE
                         }
-                        textView.alpha = 0f
-                        textView.translationX = 50f
+
+                        textView.alpha = 1f
+                        textView.translationX = 0f
                         textView.visibility = View.VISIBLE
                         customViewLayout.background =
                             ContextCompat.getDrawable(context, R.drawable.rectangle_transparent)
-                        imageView.animate().translationX(-10f).setDuration(200).start()
-                        textView.animate().alpha(1f).translationX(0f).setDuration(200).start()
+                        imageView.translationX = -10f
                         for (view in linearLayout.children) {
                             if (view != customViewLayout) {
                                 view.setBackgroundColor(Color.TRANSPARENT)
@@ -178,10 +181,7 @@ class JingleBottomBar(context: Context, attrs: AttributeSet) : LinearLayout(cont
 
     }
 
-    data class CustomViewData(
-        val imageResource: Int,
-        val text: String
-    )
+
 
 }
 
